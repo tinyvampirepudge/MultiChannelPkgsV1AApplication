@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.tiny.demo.multichannelpkgsv1application"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        flavorDimensions "v1Test"
+
+        //多渠道打包的配置，除了下面的，如果没有这句代码的话，apk的输出位置会在build/outputs/apk下面
+        // 默认是umeng的渠道
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wap"]
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 友盟多渠道打包
+    productFlavors {
+        //渠道名的闭包中可以覆写defaultConfig中的任何一个属性。
+        official {
+            //这里也可以配置每个渠道的appid
+        }
+        baidu {
+            applicationId "com.tiny.demo.firstlinecode.baidu"
+        }
+        xiaomi {
+            applicationId "com.tiny.demo.firstlinecode.xiaomi"
+        }
+        wandoujia {}
+        _360 {}
+        tencent {}
+        huawei {}
+        anzhi {}
+        website {}
+        wap {}
+        vivo {}
+        update {}
+        _test {}
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
